@@ -83,6 +83,7 @@ playwright.config.ts Browsers, builds, retries, timeouts, reporters
 
 ## Documentation
 
+- [Presentation](docs/Playwright-Commerce-E2E.pptx): a 22-slide walkthrough of the project, with a talk track in the speaker notes.
 - [Framework guide](docs/GUIDE.md): what was built, how it was set up step by step, and how to add a test. Start here.
 - [Demo app](docs/DEMO-APP.md): the shop's features, accounts, coupons, test cards and API.
 - [Seeded bugs](docs/SEEDED-BUGS.md): each planted bug and the tests that catch it.
