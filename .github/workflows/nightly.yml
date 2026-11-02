@@ -1,0 +1,50 @@
+# The nightly: both builds, the executive reports, and an issue for anything new. It runs the same
+# `npm run nightly` you can run by hand, so a local run and a scheduled one do the same thing.
+name: Nightly
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  nightly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+
+      # Each run restores the last run's history and saves its own, which is what feeds the trend.
+      - uses: actions/cache@v4
+        with:
+          path: report/history
+          key: nightly-history-${{ github.run_id }}
+          restore-keys: nightly-history-
+
+      - name: Run every build and report on it
+        run: npm run nightly
+        env:
+          E2E_FILE_ISSUES: 'true'
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CHAT_WEBHOOK_URL: ${{ secrets.CHAT_WEBHOOK_URL }}
+
+      - name: Add the results to this run's summary page
+        if: ${{ !cancelled() }}
+        run: cat report/summary.md >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: nightly-report
+          path: report
+          retention-days: 14
