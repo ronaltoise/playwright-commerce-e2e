@@ -20,6 +20,8 @@ Then open http://localhost:3000. Use `npm run app:bugs` for the version with eve
 - Coupons: percentage off, fixed amount off, free shipping, minimum spend, expiry
 - Standard and express shipping, free standard shipping from $50, and 8% tax
 
+![The cart with a coupon applied](images/cart.png)
+
 **Payment**
 
 - Card, through the mock gateway, including a 3-D Secure confirmation step
@@ -28,6 +30,8 @@ Then open http://localhost:3000. Use `npm run app:bugs` for the version with eve
 - Declines, insufficient funds, expired cards and mistyped numbers
 
 **Subscriptions**
+
+![The subscription plans](images/plans.png)
 
 - Three plans, billed monthly or annually, with two months free on annual
 - A 14-day free trial on the Enthusiast plan

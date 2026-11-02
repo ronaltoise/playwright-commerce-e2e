@@ -140,6 +140,8 @@ A page can look perfect while its scripts are failing. The console guard runs on
 | **DEGRADED** | At least one failure has no known cause                                     |
 | **BLOCKED**  | A `@smoke` test failed with no known cause, or most of the suite didn't run |
 
+![The report for a clean run](images/report-stable.png)
+
 A test that fails on a known bug is doing its job, so it doesn't make the report alarming. Only something new does. The report also flags the opposite case: a known defect that stopped failing, which may mean it's fixed.
 
 ### 9. Known defects and issues
@@ -225,7 +227,7 @@ Only `CART-09` fails. Playwright uses the shop you started instead of starting i
 
 Nothing leaves your machine until you do this yourself.
 
-1. Create an empty repository on GitHub.
+1. Create a new repository at <https://github.com/new>. Leave it empty: don't add a README, `.gitignore` or licence, because this project already has them.
 2. Connect it and push. Use your own repository's address.
 
    ```bash
@@ -235,6 +237,8 @@ Nothing leaves your machine until you do this yourself.
    ```bash
    git push -u origin main
    ```
+
+   GitHub doesn't accept your account password for this. When it asks you to sign in, use a [personal access token](https://github.com/settings/tokens) as the password, or sign in with the GitHub CLI or an SSH key.
 
 3. Nothing runs by itself after the upload. To start a workflow, open **Actions**, choose **CI** or **Nightly**, then choose **Run workflow**.
 
