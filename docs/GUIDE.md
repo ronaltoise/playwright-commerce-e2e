@@ -238,7 +238,7 @@ Nothing leaves your machine until you do this yourself.
    git push -u origin main
    ```
 
-   GitHub doesn't accept your account password for this. When it asks you to sign in, use a [personal access token](https://github.com/settings/tokens) as the password, or sign in with the GitHub CLI or an SSH key.
+   GitHub doesn't accept your account password for this. When it asks you to sign in, use a [personal access token](https://github.com/settings/tokens) as the password, with both the `repo` and `workflow` permissions, because this project includes workflow files. Signing in with the GitHub CLI or an SSH key also works.
 
 3. Nothing runs by itself after the upload. To start a workflow, open **Actions**, choose **CI** or **Nightly**, then choose **Run workflow**.
 
@@ -267,10 +267,12 @@ The report, the guard, the inventory and the pipelines all keep working unchange
 
 ## Troubleshooting
 
-| Problem                                 | Likely cause and fix                                                               |
-| --------------------------------------- | ---------------------------------------------------------------------------------- |
-| `Executable doesn't exist`              | Browsers aren't installed. Run `npx playwright install chromium`.                  |
-| Port 4173 or 4174 already in use        | A shop from an earlier run is still going. Stop it, or Playwright will reuse it.   |
-| Renewal tests fail with a 404           | A shop started by hand is missing `TEST_HOOKS=1`.                                  |
-| `docs/TEST-INVENTORY.md is out of date` | Run `npm run inventory`.                                                           |
-| A report shows no trend                 | The trend needs at least two runs, and `report/history` must survive between them. |
+| Problem                                 | Likely cause and fix                                                                                                                                                                 |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `Executable doesn't exist`              | Browsers aren't installed. Run `npx playwright install chromium`.                                                                                                                    |
+| Port 4173 or 4174 already in use        | A shop from an earlier run is still going. Stop it, or Playwright will reuse it.                                                                                                     |
+| Renewal tests fail with a 404           | A shop started by hand is missing `TEST_HOOKS=1`.                                                                                                                                    |
+| `docs/TEST-INVENTORY.md is out of date` | Run `npm run inventory`.                                                                                                                                                             |
+| Push refused: `without workflow scope`  | Your token is missing the `workflow` permission. Create a new one with `repo` and `workflow`.                                                                                        |
+| Push refused: `GH007`, private email    | GitHub is blocking your email address. Turn off "Block command line pushes that expose my email" in its email settings, or change the commits' email to your GitHub noreply address. |
+| A report shows no trend                 | The trend needs at least two runs, and `report/history` must survive between them.                                                                                                   |
