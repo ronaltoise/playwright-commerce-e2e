@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // The nightly run: every build, then a report for each. `npm run nightly` does exactly what the
-// scheduled pipeline does, so what you see here is what the schedule produces. Results are
+// GitHub pipeline does, so what you see here is what the pipeline produces. Results are
 // reported, not thrown: the run only exits non-zero if a report couldn't be built, or with
 // --strict if a build isn't HEALTHY.
 import { spawnSync } from 'node:child_process';

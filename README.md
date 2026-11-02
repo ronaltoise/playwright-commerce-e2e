@@ -1,6 +1,6 @@
 # Playwright Commerce E2E
 
-A nightly end-to-end test framework built with Playwright and TypeScript, tested against **Roastery**, a demo coffee shop with a cart, checkout, three ways to pay, and subscription billing.
+An end-to-end test framework built for nightly runs with Playwright and TypeScript, tested against **Roastery**, a demo coffee shop with a cart, checkout, three ways to pay, and subscription billing.
 
 The demo shop ships inside this repository, so everything runs on your own machine with no accounts, keys or paid services. It also has a switch that plants 14 realistic bugs, which shows the suite catching real defects rather than only passing.
 
@@ -8,7 +8,7 @@ The demo shop ships inside this repository, so everything runs on your own machi
 
 ## Results from a real run
 
-The same tests run against two builds of the shop every night.
+The same tests run against two builds of the shop.
 
 | Build       | Tests | Passed | Failed | Signal   | Time |
 | ----------- | ----: | -----: | -----: | -------- | ---: |
@@ -28,9 +28,9 @@ All 14 planted bugs were caught, and nothing unrelated failed. Of the 21 failure
 - **A console guard** that fails a test on hidden script errors, even when the page looks fine.
 - **Tests that fail on bugs.** There are no workarounds. Known failures go in a defect map, so the report can tell old problems from new ones.
 - **An executive report** with a HEALTHY, DEGRADED or BLOCKED signal, failures with causes, a run-over-run trend, coverage by area and flaky tests.
-- **Automatic issue filing** on GitHub, with a signature on each issue so a test failing every night files only once.
+- **Automatic issue filing** on GitHub, with a signature on each issue so a test that keeps failing files only once.
 - **A generated test inventory**, so the catalogue of tests can't fall out of date.
-- **A scheduled pipeline** with fast checks on every change and the full suite nightly.
+- **Ready-made GitHub pipelines** for the fast checks and the full run. They start by hand, and a small edit puts them on a nightly schedule.
 
 ## Quick start
 
@@ -77,7 +77,7 @@ e2e/
   specs/             The tests, one folder per area
 scripts/             The nightly runner and the inventory generator
 docs/                Everything below
-.github/workflows/   CI on every change, and the nightly schedule
+.github/workflows/   GitHub pipelines, started by hand
 playwright.config.ts Browsers, builds, retries, timeouts, reporters
 ```
 

@@ -15,7 +15,7 @@ This is what happens on a nightly run:
 
 ```mermaid
 flowchart TD
-    A["Schedule or npm run nightly"] --> B["Playwright starts both builds of the shop"]
+    A["npm run nightly, or Run workflow on GitHub"] --> B["Playwright starts both builds of the shop"]
     B --> C["Clean build: 103 tests, plus 6 on a phone screen"]
     B --> D["Seeded-bug build: 103 tests"]
     C --> E["results.json for each build"]
@@ -41,7 +41,7 @@ flowchart TD
 | `e2e/specs/`         | The tests themselves.                                                                                                                                                                                                                    |
 | `e2e/reporting/`     | The report generator, its tests, and the known-defect map.                                                                                                                                                                               |
 | `scripts/`           | `nightly.mjs` runs everything. `inventory.mjs` writes the test catalogue.                                                                                                                                                                |
-| `.github/workflows/` | `ci.yml` runs on every change, `nightly.yml` on the schedule.                                                                                                                                                                            |
+| `.github/workflows/` | `ci.yml` holds the fast checks and `nightly.yml` the full run. Both start by hand.                                                                                                                                                       |
 
 ## How it was set up, step by step
 
@@ -147,7 +147,7 @@ A test that fails on a known bug is doing its job, so it doesn't make the report
 Tests never work around a bug. They fail, and the failure gets explained in one of two ways:
 
 - **`e2e/reporting/known-defects.json`** maps a test ID to its bug.
-- **GitHub issues.** On GitHub, each new failure gets one issue containing a signature, a short code made from the test's name. The next night's report searches for that code, finds the issue and files nothing new. A closed issue that fails again is reported as a regression.
+- **GitHub issues.** On GitHub, each new failure gets one issue containing a signature, a short code made from the test's name. The next run's report searches for that code, finds the issue and files nothing new. A closed issue that fails again is reported as a regression.
 
 Filing stops at 5 issues in one run, because that many new failures usually share one cause. If GitHub can't be reached, nothing is filed, so that no duplicates appear. These rules are covered by the tests in `e2e/reporting/exec-report.test.mjs`, which use a fake GitHub on your own machine.
 
@@ -157,12 +157,14 @@ Without a token, the report contacts nothing.
 
 `scripts/nightly.mjs` runs each build, builds each report and writes `report/index.html`. A failed test doesn't stop the run or fail the script, because a nightly's job is to report.
 
-GitHub Actions calls the same script, so a run on your machine and a scheduled one do the same thing.
+GitHub Actions calls the same script, so a run on your machine and one on GitHub do the same thing.
 
-| Workflow      | When                              | What it runs                                |
-| ------------- | --------------------------------- | ------------------------------------------- |
-| `ci.yml`      | Every push and pull request       | `npm run check` and the smoke tests         |
-| `nightly.yml` | 02:00 UTC every night, or by hand | `npm run nightly`, then uploads the reports |
+| Workflow      | When              | What it runs                                |
+| ------------- | ----------------- | ------------------------------------------- |
+| `ci.yml`      | When you start it | `npm run check` and the smoke tests         |
+| `nightly.yml` | When you start it | `npm run nightly`, then uploads the reports |
+
+Neither runs by itself. Each file has its automatic triggers commented out, so turning on a schedule is a small edit.
 
 ## How to add a test
 
@@ -219,19 +221,9 @@ npm run test:bugs
 
 Only `CART-09` fails. Playwright uses the shop you started instead of starting its own.
 
-## Running on a schedule
+## Uploading to GitHub
 
-### On your own machine
-
-Everything works without GitHub. To run it each night, add a line to your crontab with `crontab -e`. Replace both paths with your own, and find your Node folder with `dirname "$(which node)"`.
-
-```text
-0 2 * * * cd /path/to/playwright-commerce-e2e && PATH=/path/to/node/bin:$PATH npm run nightly >> report/nightly.log 2>&1
-```
-
-### On GitHub
-
-Nothing runs on GitHub until you upload the repository yourself. When you do:
+Nothing leaves your machine until you do this yourself.
 
 1. Create an empty repository on GitHub.
 2. Connect it and push. Use your own repository's address.
@@ -244,11 +236,21 @@ Nothing runs on GitHub until you upload the repository yourself. When you do:
    git push -u origin main
    ```
 
-3. The workflows start by themselves. To try the nightly straight away, open **Actions**, then **Nightly**, then **Run workflow**.
+3. Nothing runs by itself after the upload. To start a workflow, open **Actions**, choose **CI** or **Nightly**, then choose **Run workflow**.
 
-On the first night the seeded-bug build files 3 issues, one for each failure left unmapped on purpose. The next night it finds them and reports HEALTHY. To send a message to Slack or Google Chat, add a repository secret called `CHAT_WEBHOOK_URL`.
+The first Nightly run files 3 issues, one for each failure left unmapped on purpose. The next run finds them and reports HEALTHY. To send a message to Slack or Google Chat, add a repository secret called `CHAT_WEBHOOK_URL`.
 
-GitHub pauses scheduled workflows on public repositories after 60 days with no activity. Re-enable it from the Actions tab.
+## Running on a schedule
+
+Nothing is scheduled, so every run is one you start. This project is a showcase, and that's deliberate. If you want automatic runs later, there are two ways.
+
+**On GitHub:** uncomment the triggers at the top of each file in `.github/workflows/`. `nightly.yml` then runs at 02:00 UTC every night, and `ci.yml` runs on every push and pull request. GitHub pauses scheduled workflows on public repositories after 60 days with no activity, and you can turn them back on from the Actions tab.
+
+**On your own machine:** add a line to your crontab with `crontab -e`. Replace both paths with your own, and find your Node folder with `dirname "$(which node)"`.
+
+```text
+0 2 * * * cd /path/to/playwright-commerce-e2e && PATH=/path/to/node/bin:$PATH npm run nightly >> report/nightly.log 2>&1
+```
 
 ## Using this on a real site
 

@@ -1,11 +1,12 @@
 # The nightly: both builds, the executive reports, and an issue for anything new. It runs the same
-# `npm run nightly` you can run by hand, so a local run and a scheduled one do the same thing.
+# `npm run nightly` you can run by hand, so a local run and a pipeline run do the same thing.
+# It only runs when started from the Actions tab. To run it every night, uncomment `schedule`.
 name: Nightly
 
 on:
-  schedule:
-    - cron: '0 2 * * *'
   workflow_dispatch:
+  # schedule:
+  #   - cron: '0 2 * * *'
 
 permissions:
   contents: read

@@ -1,10 +1,12 @@
-# Runs on every push and pull request: the fast checks, then the critical journeys.
+# The fast checks, then the critical journeys. It only runs when started from the Actions tab.
+# To run it on every change, uncomment `push` and `pull_request`.
 name: CI
 
 on:
-  push:
-    branches: [main]
-  pull_request:
+  workflow_dispatch:
+  # push:
+  #   branches: [main]
+  # pull_request:
 
 permissions:
   contents: read
