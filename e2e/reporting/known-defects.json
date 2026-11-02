@@ -1,0 +1,20 @@
+{
+  "ACC-04": { "id": "BUG-09", "cause": "A customer can read another customer's order" },
+  "ADM-05": { "id": "BUG-13", "cause": "A refund can exceed what the customer paid" },
+  "CART-04": { "id": "BUG-11", "cause": "The cart badge keeps its old count after a line is removed" },
+  "CART-05": { "id": "BUG-04", "cause": "The cart accepts more units than are in stock" },
+  "CART-09": { "id": "BUG-03", "cause": "An order of exactly $50.00 misses free shipping" },
+  "CAT-04": { "id": "BUG-10", "cause": "Sort by price compares prices as text" },
+  "CAT-12": { "id": "BUG-04", "cause": "The cart accepts more units than are in stock" },
+  "CPN-04": { "id": "BUG-05", "cause": "An expired coupon is accepted" },
+  "CPN-06": { "id": "BUG-02", "cause": "Applying the same coupon twice doubles the discount" },
+  "PAY-02": { "id": "BUG-01", "cause": "A declined card still books the order" },
+  "PAY-03": { "id": "BUG-01", "cause": "A declined card still books the order" },
+  "SUB-09": { "id": "BUG-08", "cause": "An upgrade charges the full new price instead of the prorated difference" },
+  "SUB-11": { "id": "BUG-07", "cause": "Cancelling at period end cancels straight away" },
+  "SUB-12": { "id": "BUG-07", "cause": "Cancelling at period end cancels straight away" },
+  "SUB-18": { "id": "BUG-06", "cause": "A failed renewal leaves the subscription active" },
+  "SUB-19": { "id": "BUG-06", "cause": "A failed renewal leaves the subscription active" },
+  "SUB-20": { "id": "BUG-06", "cause": "A failed renewal leaves the subscription active" },
+  "SUB-21": { "id": "BUG-06", "cause": "A failed renewal leaves the subscription active" }
+}
