@@ -1,0 +1,38 @@
+{
+  "name": "playwright-commerce-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A nightly Playwright and TypeScript test framework for an e-commerce and subscription shop, with a demo app and seeded bugs included.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "app": "node app/server.mjs",
+    "app:bugs": "SEEDED_BUGS=all PORT=3001 node app/server.mjs",
+    "test": "playwright test --project=stable --project=stable-mobile",
+    "test:smoke": "playwright test --project=stable --grep @smoke",
+    "test:bugs": "playwright test --project=buggy",
+    "test:ui": "playwright test --project=stable --ui",
+    "nightly": "node scripts/nightly.mjs",
+    "report:open": "playwright show-report report/latest/playwright-report",
+    "inventory": "node scripts/inventory.mjs",
+    "inventory:check": "node scripts/inventory.mjs --check",
+    "lint": "eslint .",
+    "format": "prettier --write \"**/*.{ts,mjs,js,css,html,md,yml,json}\"",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm run lint && npm run inventory:check && npm run test:report",
+    "test:report": "node --test e2e/reporting/exec-report.test.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.5",
+    "@playwright/test": "1.62.1",
+    "@types/node": "20.19.43",
+    "eslint": "9.39.5",
+    "eslint-plugin-playwright": "2.12.2",
+    "prettier": "3.9.10",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.72.1"
+  }
+}

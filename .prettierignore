@@ -1,0 +1,6 @@
+node_modules
+playwright-report
+test-results
+report
+package-lock.json
+docs/TEST-INVENTORY.md
