@@ -233,22 +233,30 @@ Only `CART-09` fails. Playwright uses the shop you started instead of starting i
 
 Nothing leaves your machine until you do this yourself.
 
-1. Create a new repository at <https://github.com/new>. Leave it empty: don't add a README, `.gitignore` or licence, because this project already has them.
-2. Connect it and push. Use your own repository's address.
+1. Create a new repository at <https://github.com/new>. Leave it empty: don't add a README, `.gitignore` or licence, because this project already has them. GitHub then shows some setup commands. You don't need them.
+2. Connect it and push. Replace `YOUR-USERNAME` with your GitHub username.
 
    ```bash
-   git remote add origin https://github.com/YOUR-NAME/playwright-commerce-e2e.git
+   git remote add origin https://github.com/YOUR-USERNAME/playwright-commerce-e2e.git
    ```
+
+   If Git answers `remote origin already exists`, for example because this copy was cloned from a bundle, run this instead:
+
+   ```bash
+   git remote set-url origin https://github.com/YOUR-USERNAME/playwright-commerce-e2e.git
+   ```
+
+   Then push:
 
    ```bash
    git push -u origin main
    ```
 
-   GitHub doesn't accept your account password for this. When it asks you to sign in, use a [personal access token](https://github.com/settings/tokens) as the password, with both the `repo` and `workflow` permissions, because this project includes workflow files. Signing in with the GitHub CLI or an SSH key also works.
+   GitHub doesn't accept your account password for this. On Windows, Git for Windows usually opens a browser sign-in, and that's all you need. Elsewhere, when it asks you to sign in, paste a [personal access token (classic)](https://github.com/settings/tokens/new) as the password, with both the `repo` and `workflow` scopes, because this project includes workflow files. Signing in through the GitHub CLI (`gh auth login`, answering yes to authenticating Git) also works.
 
-3. Nothing runs by itself after the upload. To start a workflow, open **Actions**, choose **CI** or **Nightly**, then choose **Run workflow**.
+3. Nothing runs by itself after the upload. To start a workflow, open **Actions**, choose **CI** or **Nightly**, click **Run workflow**, then click the green **Run workflow** button in the panel that opens.
 
-The first Nightly run files 3 issues, one for each failure left unmapped on purpose. The next run finds them and reports HEALTHY. To send a message to Slack or Google Chat, add a repository secret called `CHAT_WEBHOOK_URL`.
+The first Nightly run files 3 issues, one for each failure left unmapped on purpose. The next run finds them and reports HEALTHY. GitHub's issue search can take a little while to include new issues, so wait a few minutes before running Nightly again, or it may file them twice. To send a message to Slack or Google Chat, add a repository secret called `CHAT_WEBHOOK_URL`.
 
 ## Running on a schedule
 
@@ -273,12 +281,14 @@ The report, the guard, the inventory and the pipelines all keep working unchange
 
 ## Troubleshooting
 
-| Problem                                 | Likely cause and fix                                                                                                                                                                 |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `Executable doesn't exist`              | Browsers aren't installed. Run `npx playwright install chromium`.                                                                                                                    |
-| Port 4173 or 4174 already in use        | A shop from an earlier run is still going. Stop it, or Playwright will reuse it.                                                                                                     |
-| Renewal tests fail with a 404           | A shop started by hand is missing `TEST_HOOKS=1`.                                                                                                                                    |
-| `docs/TEST-INVENTORY.md is out of date` | Run `npm run inventory`.                                                                                                                                                             |
-| Push refused: `without workflow scope`  | Your token is missing the `workflow` permission. Create a new one with `repo` and `workflow`.                                                                                        |
-| Push refused: `GH007`, private email    | GitHub is blocking your email address. Turn off "Block command line pushes that expose my email" in its email settings, or change the commits' email to your GitHub noreply address. |
-| A report shows no trend                 | The trend needs at least two runs, and `report/history` must survive between them.                                                                                                   |
+| Problem                                                                                 | Likely cause and fix                                                                                                                                                                                                                                                                                                                                                                        |
+| --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Executable doesn't exist`                                                              | Browsers aren't installed. Run `npx playwright install chromium`.                                                                                                                                                                                                                                                                                                                           |
+| Port 4173 or 4174 already in use                                                        | A shop from an earlier run is still going. Stop it, or Playwright will reuse it.                                                                                                                                                                                                                                                                                                            |
+| Renewal tests fail with a 404                                                           | A shop started by hand is missing `TEST_HOOKS=1`.                                                                                                                                                                                                                                                                                                                                           |
+| `docs/TEST-INVENTORY.md is out of date`                                                 | Run `npm run inventory`.                                                                                                                                                                                                                                                                                                                                                                    |
+| `remote origin already exists`                                                          | This copy already has a remote, for example the bundle it was cloned from. Use `git remote set-url origin` with your address instead.                                                                                                                                                                                                                                                       |
+| `refusing to allow a Personal Access Token to create or update workflow`                | Your token is missing the `workflow` scope. Open it at <https://github.com/settings/tokens>, tick **workflow**, click **Update token**, then push again. Your computer may have saved the token, and editing it keeps the saved copy working. If you can't edit it, create a new token with `repo` and `workflow`, remove the saved github.com sign-in from your computer, then push again. |
+| Push refused: `GH007`, private email                                                    | GitHub is blocking your email address. Turn off "Block command line pushes that expose my email" in its email settings, which makes the address in these commits public, then push again. You can turn it back on afterwards.                                                                                                                                                               |
+| Push refused: `(fetch first)`, `Updates were rejected because the remote contains work` | The GitHub repository isn't empty. Don't run `git pull`. Delete the repository and create it again without a README, `.gitignore` or licence.                                                                                                                                                                                                                                               |
+| A report shows no trend                                                                 | The trend needs at least two runs, and `report/history` must survive between them.                                                                                                                                                                                                                                                                                                          |
