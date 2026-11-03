@@ -48,6 +48,12 @@ To see a single bug caught, start a shop with only that bug, then run the suite 
 SEEDED_BUGS=BUG-08 PORT=4174 TEST_HOOKS=1 node app/server.mjs
 ```
 
+In Windows PowerShell, use this instead. The settings last until you close that window, so close it when you're done:
+
+```powershell
+$env:SEEDED_BUGS='BUG-08'; $env:PORT='4174'; $env:TEST_HOOKS='1'; node app/server.mjs
+```
+
 ```bash
 npm run test:bugs
 ```

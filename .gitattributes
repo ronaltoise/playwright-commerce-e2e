@@ -1,0 +1,5 @@
+# The same line endings on every system. Without this, Git for Windows checks text files out
+# with CRLF, and `npm run inventory:check` then sees docs/TEST-INVENTORY.md as out of date.
+* text=auto eol=lf
+*.png binary
+*.pptx binary

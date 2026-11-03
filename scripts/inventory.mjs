@@ -3,6 +3,11 @@
 // code. `--check` fails if the file is out of date, which is how the pipeline enforces it.
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
+import { createRequire } from 'node:module';
+
+// Playwright's CLI, run with this same Node. `npx` is a .cmd file on Windows, which spawnSync
+// can't start without a shell.
+const PLAYWRIGHT = createRequire(import.meta.url).resolve('@playwright/test/cli');
 
 const OUTPUT = 'docs/TEST-INVENTORY.md';
 
@@ -17,7 +22,7 @@ const AREAS = {
   subscription: 'Subscriptions',
 };
 
-const listed = spawnSync('npx', ['playwright', 'test', '--project=stable', '--list', '--reporter=json'], {
+const listed = spawnSync(process.execPath, [PLAYWRIGHT, 'test', '--project=stable', '--list', '--reporter=json'], {
   encoding: 'utf8',
   maxBuffer: 64 * 1024 * 1024,
 });

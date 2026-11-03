@@ -217,6 +217,12 @@ Each bug can run alone. This starts a shop with one bug, then runs the suite aga
 SEEDED_BUGS=BUG-03 PORT=4174 TEST_HOOKS=1 node app/server.mjs
 ```
 
+In Windows PowerShell, use this instead. The settings last until you close that window, so close it when you're done:
+
+```powershell
+$env:SEEDED_BUGS='BUG-03'; $env:PORT='4174'; $env:TEST_HOOKS='1'; node app/server.mjs
+```
+
 ```bash
 npm run test:bugs
 ```

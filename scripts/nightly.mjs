@@ -5,6 +5,11 @@
 // --strict if a build isn't HEALTHY.
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
+import { createRequire } from 'node:module';
+
+// Playwright's CLI, run with this same Node. `npx` is a .cmd file on Windows, which spawnSync
+// can't start without a shell.
+const PLAYWRIGHT = createRequire(import.meta.url).resolve('@playwright/test/cli');
 
 const BUILDS = [
   { name: 'stable', title: 'Clean build', projects: ['stable', 'stable-mobile'] },
@@ -33,7 +38,7 @@ for (const build of BUILDS) {
   const dir = `report/${build.name}`;
   console.log(`\n=== ${build.title} ===`);
   const projects = build.projects.flatMap((project) => ['--project', project]);
-  const run = spawnSync('npx', ['playwright', 'test', ...projects], {
+  const run = spawnSync(process.execPath, [PLAYWRIGHT, 'test', ...projects], {
     stdio: ['ignore', 'pipe', 'inherit'],
     encoding: 'utf8',
     maxBuffer: 64 * 1024 * 1024,
@@ -63,7 +68,7 @@ for (const build of BUILDS) {
     ...(build.known ? ['--known', build.known] : []),
     ...(fileIssues ? ['--file-issues'] : []),
   ];
-  const report = spawnSync('node', reportArgs, { encoding: 'utf8' });
+  const report = spawnSync(process.execPath, reportArgs, { encoding: 'utf8' });
   if (report.status !== 0) {
     console.error(report.stderr);
     outcomes.push({ ...build, signal: 'NO REPORT', verdict: 'The report could not be built.' });

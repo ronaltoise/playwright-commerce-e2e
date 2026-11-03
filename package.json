@@ -10,7 +10,7 @@
   },
   "scripts": {
     "app": "node app/server.mjs",
-    "app:bugs": "SEEDED_BUGS=all PORT=3001 node app/server.mjs",
+    "app:bugs": "node scripts/app-bugs.mjs",
     "test": "playwright test --project=stable --project=stable-mobile",
     "test:smoke": "playwright test --project=stable --grep @smoke",
     "test:bugs": "playwright test --project=buggy",
