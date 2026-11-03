@@ -13,6 +13,7 @@ import { promisify } from 'node:util';
 const run = promisify(execFile);
 const script = fileURLToPath(new URL('./exec-report.mjs', import.meta.url));
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'exec-report-'));
+after(() => fs.rmSync(dir, { recursive: true, force: true }));
 
 const test = (id, status, { tags = [], title = 'does something' } = {}) => ({
   title: `${id} > ${title}`,

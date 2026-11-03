@@ -4,3 +4,7 @@ test-results/
 report/
 e2e/.auth/
 .env
+.DS_Store
+._*
+Thumbs.db
+desktop.ini
